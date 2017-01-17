@@ -626,7 +626,7 @@ void BinaryDescriptor::computeImpl( const Mat& imageSrc, std::vector<KeyLine>& k
   }
 
   /* delete useless OctaveSingleLines */
-  for ( size_t i = 0; i < sl.size(); i++ )
+/*  for ( size_t i = 0; i < sl.size(); i++ )
   {
     for ( size_t j = 0; j < sl[i].size(); j++ )
     {
@@ -634,8 +634,26 @@ void BinaryDescriptor::computeImpl( const Mat& imageSrc, std::vector<KeyLine>& k
       if( (int) ( sl[i][j] ).octaveCount > octaveIndex )
         ( sl[i] ).erase( ( sl[i] ).begin() + j );
     }
+  }  this gives error, vector erase not correct
+*/
+  LinesVec lv_temp;
+  ScaleLines sl_temp;
+  for ( size_t i = 0; i < sl.size(); i++ )
+  {
+    for ( size_t j = 0; j < sl[i].size(); j++ )
+    {
+      //if( (int) ( sl[i][j] ).octaveCount > params.numOfOctave_ )
+      if( (int) ( sl[i][j] ).octaveCount > octaveIndex ){
+        //std::cout<<"erase\t"<<i<<"\t"<<j<<std::endl;
+        //( sl[i] ).erase( ( sl[i] ).begin() + j );
+      }
+      else {
+        lv_temp.push_back(sl[i][j]);
+      }
+    }
+    sl_temp.push_back(lv_temp);
+    lv_temp.clear();
   }
-
   /* compute LBD descriptors */
   bd->computeLBD( sl, useDetectionData );
 
